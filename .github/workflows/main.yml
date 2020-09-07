@@ -35,13 +35,15 @@ jobs:
         working-directory: ../../airtable-workspace/
         run: |
           sudo apt install -yqq libpq-dev
-          echo pwd
+          gem install bundler
 
       - name: Prepare Database
+        working-directory: ../../airtable-workspace/
         run: |
           bundle exec rails db:Prepare
 
       - name: Run Tests
+        working-directory: ../../airtable-workspace/
         env:
           DATABASE_URL: postgres://postgres:@localhost:5432/airtable_workspace_test
         run: |
