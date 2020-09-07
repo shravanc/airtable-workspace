@@ -51,7 +51,9 @@ jobs:
           POSTGRES_PASSWORD: welcome
 
       - name: Run RSpec
-        run: COVERAGE=true bundle exec rspec  --require rails_helper
+        run: |
+          cd ./airtable-workspace
+          COVERAGE=true bundle exec rspec  --require rails_helper
         env:
           RAILS_ENV: test
           POSTGRES_USER: postgres
