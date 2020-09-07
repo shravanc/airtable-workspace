@@ -41,6 +41,7 @@ jobs:
 
       - name: Prepare Database
         run: |
+          bundle exec rails db:prepare
 
             
 
