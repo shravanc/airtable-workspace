@@ -1,49 +1,57 @@
-# This is a basic workflow to help you get started with Actions
+# .github/workflows/ci.yml
 
 name: CI
 
-# Controls when the action will run. Triggers the workflow on push or pull request
-# events but only for the master branch
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
-env:
-  working-directory: ${HOME}/
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
+
 jobs:
-  # This workflow contains a single job called "build"
-  test:
-    services:
-      db:
-        image: postgres:11
-        ports: ['5432:5432']
-    # The type of runner that the job will run on
+  build:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    services:
+      postgres:
+        image: postgres:11
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: welcome
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v1
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1.45.0
+      - uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.7.1
+          ruby-version: 2.5.1
 
-      - name: Install Dependencies
+      - name: Install dependent libraries
+        run: sudo apt-get install libpq-dev
+
+      - name: Bundle install
         run: |
-          echo $HOME
-          sudo apt install -yqq libpq-dev
           gem install bundler
+          cd ./airtable-workspace
+          bundle install --jobs 4 --retry 3
 
-      - name: Prepare Database
+      - name: Setup Database
         run: |
           cd ./airtable-workspace
-          ls
-          bundle exec rails db:prepare
+          cp config/database.yml.github-actions config/database.yml
+          bundle exec rake db:create
+          bundle exec rake db:schema:load
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: welcome
 
-            
-
+      - name: Run RSpec
+        run: COVERAGE=true bundle exec rspec  --require rails_helper
+        env:
+          RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: welcome
