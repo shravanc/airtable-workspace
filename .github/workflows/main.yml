@@ -40,7 +40,7 @@ jobs:
       - name: Prepare Database
         working-directory: ../../airtable-workspace/
         run: |
-          bundle exec rails db:Prepare
+          bundle exec rails db:prepare
 
       - name: Run Tests
         working-directory: ../../airtable-workspace/
