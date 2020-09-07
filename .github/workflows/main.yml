@@ -32,15 +32,15 @@ jobs:
           ruby-version: 2.5.1
 
       - name: Install Dependencies
-        working-directory: ../../airtable-workspace/
         run: |
           echo $HOME
           sudo apt install -yqq libpq-dev
           gem install bundler
 
       - name: Prepare Database
-        working-directory: ../../airtable-workspace/
+        working-directory: ${HOME}/airtable-workspace/
         run: |
+          echo pwd
           bundle exec rails db:prepare
 
       - name: Run Tests
