@@ -34,6 +34,7 @@ jobs:
       - name: Install Dependencies
         working-directory: ../../airtable-workspace/
         run: |
+          echo $HOME
           sudo apt install -yqq libpq-dev
           gem install bundler
 
