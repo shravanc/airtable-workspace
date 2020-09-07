@@ -41,9 +41,8 @@ jobs:
 
       - name: Prepare Database
         run: |
-          pwd
-          ls
-          pwd
+          cd ./airtable-workspace
+          bundle exec rails db:prepare
           # bundle exec rails db:prepare
 
             
