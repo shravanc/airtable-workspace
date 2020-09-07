@@ -35,7 +35,7 @@ jobs:
         working-directory: ../../airtable-workspace/
         run: |
           sudo apt install -yqq libpq-dev
-          gem install bundler
+          echo pwd
 
       - name: Prepare Database
         run: |
