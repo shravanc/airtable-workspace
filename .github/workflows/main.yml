@@ -42,7 +42,7 @@ jobs:
       - name: Prepare Database
         run: |
           cd ./airtable-workspace
-          bundle exec rails db:prepare
+          rails db:prepare
           # bundle exec rails db:prepare
 
             
