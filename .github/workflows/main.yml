@@ -32,8 +32,7 @@ jobs:
           ruby-version: 2.5.1
 
       - name: Install Dependencies
-        with:
-          working-directory: ../../airtable-workspace
+        working-directory: ../../airtable-workspace/
         run: |
           sudo apt install -yqq libpq-dev
           gem install bundler
